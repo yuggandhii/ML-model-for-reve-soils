@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .drop-zone {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .drop-zone.dragover {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .loading {
+            display: none;
+        }
+        .loading.active {
+            display: block;
+        }
+        .result {
+            display: none;
+        }
+        .result.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Plant Disease Classifier</h1>
+            
+            <!-- Upload Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <div class="drop-zone rounded-lg p-8 text-center cursor-pointer" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600 mb-2">Drag and drop your image here</p>
+                    <p class="text-gray-500 text-sm">or</p>
+                    <label class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer">
+                        Browse Files
+                        <input type="file" id="fileInput" class="hidden" accept="image/*">
+                    </label>
+                    <p class="text-gray-500 text-sm mt-4">Supported formats: JPG, JPEG, PNG</p>
+                </div>
+                
+                <!-- Image Preview -->
+                <div id="imagePreview" class="mt-4 hidden">
+                    <img id="preview" class="max-w-full h-auto rounded-lg mx-auto" alt="Preview">
+                    <button id="removeImage" class="mt-2 text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i> Remove Image
+                    </button>
+                </div>
+                
+                <!-- Loading Indicator -->
+                <div class="loading mt-4 text-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                    <p class="text-gray-600 mt-2">Analyzing image...</p>
+                </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="result bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Analysis Results</h2>
+                <div id="results" class="space-y-4">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Supported Plants Section -->
+            <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Supported Plants</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-700">Crops</h3>
+                        <ul class="text-sm text-gray-600 mt-2">
+                            <li>• Corn</li>
+                            <li>• Potato</li>
+                            <li>• Rice</li>
+                            <li>• Sugarcane</li>
+                            <li>• Wheat</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-700">Diseases</h3>
+                        <ul class="text-sm text-gray-600 mt-2">
+                            <li>• Common Rust</li>
+                            <li>• Gray Leaf Spot</li>
+                            <li>• Northern Leaf Blight</li>
+                            <li>• Early Blight</li>
+                            <li>• Late Blight</li>
+                            <li>• Brown Spot</li>
+                            <li>• Leaf Blast</li>
+                            <li>• Neck Blast</li>
+                            <li>• Bacterial Blight</li>
+                            <li>• Red Rot</li>
+                            <li>• Leaf Rust</li>
+                            <li>• Septoria</li>
+                            <li>• Yellow Rust</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const preview = document.getElementById('preview');
+        const removeImage = document.getElementById('removeImage');
+        const loading = document.querySelector('.loading');
+        const result = document.querySelector('.result');
+        const results = document.getElementById('results');
+
+        // Drag and drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        removeImage.addEventListener('click', () => {
+            imagePreview.classList.add('hidden');
+            result.classList.remove('active');
+            fileInput.value = '';
+        });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+                uploadImage(file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            loading.classList.add('active');
+            result.classList.remove('active');
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.remove('active');
+                if (data.success) {
+                    displayResults(data);
+                    result.classList.add('active');
+                } else {
+                    alert(data.error || 'An error occurred');
+                }
+            })
+            .catch(error => {
+                loading.classList.remove('active');
+                alert('An error occurred while processing the image');
+                console.error(error);
+            });
+        }
+
+        function displayResults(data) {
+            results.innerHTML = `
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800 mb-2">Primary Diagnosis</h3>
+                    <p class="text-green-700">${formatClassName(data.prediction)}</p>
+                    <p class="text-sm text-green-600 mt-1">Confidence: ${data.confidence.toFixed(2)}%</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Alternative Possibilities</h3>
+                    <ul class="space-y-2">
+                        ${data.top3_predictions.slice(1).map(pred => `
+                            <li class="text-blue-700">
+                                ${formatClassName(pred.class)} (${pred.confidence.toFixed(2)}%)
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function formatClassName(className) {
+            return className
+                .split('___')
+                .map(part => part.replace(/_/g, ' '))
+                .join(' - ');
+        }
+    </script>
+</body>
+</html> 

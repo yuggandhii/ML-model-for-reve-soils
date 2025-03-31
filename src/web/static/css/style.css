@@ -1,0 +1,356 @@
+/* Main Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    flex: 1;
+}
+
+/* Header */
+header h1 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+header p {
+    color: #7f8c8d;
+    font-size: 1.2rem;
+}
+
+/* Cards */
+.card {
+    border-radius: 15px;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #27ae60;
+    padding: 20px;
+    border-bottom: none;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: 10px;
+    padding: 12px 20px;
+    border: 2px solid #e0e0e0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(39, 174, 96, 0.15);
+    border-color: #27ae60;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #27ae60;
+    border-color: #27ae60;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #219653;
+    border-color: #219653;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-outline-secondary {
+    color: #7f8c8d;
+    border-color: #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 20px;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+/* Processing Mode */
+.btn-group {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background-color: #27ae60;
+    border-color: #27ae60;
+    color: white;
+}
+
+.btn-outline-primary {
+    color: #27ae60;
+    border-color: #27ae60;
+}
+
+.btn-outline-primary:hover {
+    background-color: rgba(39, 174, 96, 0.1);
+}
+
+/* Nav Pills */
+.nav-pills {
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.nav-pills .nav-link {
+    color: #7f8c8d;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #27ae60;
+    color: white;
+}
+
+/* Image Preview */
+#image-preview-container {
+    margin: 25px auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+#image-preview {
+    max-height: 400px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#image-preview:hover {
+    transform: scale(1.02);
+}
+
+/* Batch Preview */
+#batch-preview, #url-list {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+#batch-preview-grid img, #url-preview-grid img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#batch-preview-grid img:hover, #url-preview-grid img:hover {
+    transform: scale(1.05);
+}
+
+/* Image Enhancement Options */
+.form-check-input:checked {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-top: 0.25em;
+}
+
+/* Results */
+.progress {
+    height: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    background-color: #f0f0f0;
+}
+
+.progress-bar {
+    background-color: #27ae60;
+    transition: width 1s ease-in-out;
+}
+
+.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    border-color: rgba(39, 174, 96, 0.2);
+    color: #27ae60;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#top-prediction-label {
+    margin-bottom: 15px;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+/* Batch Results */
+#batch-results-grid .card {
+    transition: all 0.3s ease;
+}
+
+#batch-results-grid .card:hover {
+    transform: translateY(-5px);
+}
+
+#batch-results-grid .card-title {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+#batch-results-grid .alert {
+    margin-bottom: 10px;
+}
+
+/* Table */
+.table {
+    margin-top: 20px;
+}
+
+.table th {
+    font-weight: 600;
+    color: #2c3e50;
+    border-top: none;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 15px;
+}
+
+/* Footer */
+footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: auto;
+}
+
+footer p {
+    color: #95a5a6;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Loader */
+#loader {
+    padding: 40px 0;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Error Message */
+#error-message {
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+    
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+    
+    header h1 {
+        font-size: 32px;
+    }
+    
+    #image-preview-container {
+        max-width: 300px;
+    }
+    
+    #batch-preview-grid img, #url-preview-grid img {
+        height: 120px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+#results-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Export Buttons */
+.btn-group .btn {
+    border-radius: 8px;
+    margin-left: 5px;
+}
+
+.btn-group .btn:first-child {
+    margin-left: 0;
+}
+
+/* Image Rotation */
+#rotate-image {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#rotate-image:hover {
+    background-color: white;
+    transform: scale(1.1);
+} 
